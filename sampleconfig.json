@@ -1,0 +1,12 @@
+{
+	"db": 			"/path/to/idle.db",
+	"username": 	"youremail@gmail.com",
+	"password": 	"password",
+
+	"rpg": {
+		"rpbase": 	600,
+		"rpstep": 	1.16,
+		"ticrate": 	10000,
+		"saverate": 600000
+	}
+}
