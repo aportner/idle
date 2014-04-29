@@ -46,6 +46,8 @@ Idle.prototype.initCommands = function()
     this.commands.addCommand( "auth", "handleAuth" );
     this.commands.addCommand( "vcard", "handleVCard" );
     this.commands.addCommand( "hog", "handleHOG" );
+    this.commands.addCommand( "levelup", "handleLevelUp" );
+    this.commands.addCommand( "challenge", "handleChallenge" );
 }
 
 
@@ -92,6 +94,27 @@ Idle.prototype.handleHOG    = function( jid, args, user, email )
 }
 
 
+Idle.prototype.handleLevelUp    = function( jid, args, user, email )
+{
+    if ( user != null && user.getACL() >= this.config.permissions.level_up )
+    {
+        console.log( "Idle :: " + email + " triggered a level up" );
+        user.levelUp();
+        this.events.levelUp( user );
+    }
+}
+
+
+Idle.prototype.handleChallenge    = function( jid, args, user, email )
+{
+    if ( user != null && user.getACL() >= this.config.permissions.challenge )
+    {
+        console.log( "Idle :: " + email + " triggered a challenge" );
+        this.events.challengeOpponent( user );
+    }
+}
+
+
 Idle.prototype.hog          = function() { this.events.hog(); }
 
 
@@ -131,6 +154,7 @@ Idle.prototype.handleRegister = function( jid, args, user, email )
 
 Idle.prototype.handleInfo   = function( jid, args, user, email )
 {
+    try {
     if ( user )
     {
         var info    = "-- " + email + " --\n";
@@ -146,9 +170,27 @@ Idle.prototype.handleInfo   = function( jid, args, user, email )
             info    += "ACL: " + acl + "\n";
         }
 
+        info        += "--------------------\nEquipment:\n";
+
+        var items       = this.config.rpg.items;
+        var numItems    = items.length;
+        var score       = 0;
+
+        for ( var i = 0; i < numItems; ++i )
+        {
+            var type    = items[ i ];
+            var item    = user.getItem( type );
+            var level   = item.level;
+
+            info        += type + ": " + level + "\n";
+            score       += level;
+        }
+
+        info        += "\nScore: " + score;
 
         this.connection.sendMessage( jid, info )
     }
+    } catch ( err ) { console.log( err ); }
 }
 
 
