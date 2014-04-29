@@ -4,13 +4,19 @@ var Connection  = require( './lib/connection' );
 var Commands    = require( './lib/commands' );
 var Users       = require( './lib/users' );
 var GameTimer   = require( './lib/timer' );
+var Events      = require( './lib/events' );
 var config      = require( './config.json' );
+
+
+var ACL_OWNER   = 500;
+
 
 function Idle()
 {
     var self        = this;
     this.config     = config;
     this.db         = new Engine.Db( config.db, {} );
+    this.events     = new Events( this );
 
     this.users      = new Users.Users( this, this.db );
     this.users.load().then( function() {
@@ -36,18 +42,62 @@ Idle.prototype.initCommands = function()
 {
     this.commands.addCommand( "register", "handleRegister", "Registers an account" );
     this.commands.addCommand( "info", "handleInfo", "Prints out the info of your account" );
+    this.commands.addCommand( "save", "handleSave" );
+    this.commands.addCommand( "auth", "handleAuth" );
+    this.commands.addCommand( "vcard", "handleVCard" );
+    this.commands.addCommand( "hog", "handleHOG" );
 }
 
 
 Idle.prototype.online   = function()
 {
-    this.gameTimer  = new GameTimer( this, this.config.rpg.ticrate, this.config.rpg.saverate );
+    this.gameTimer  = new GameTimer( this );
 }
+
+
+Idle.prototype.handleSave   = function( jid, args, user, email )
+{
+    var self        = this;
+
+    if ( user.getACL() >= this.config.permissions.save )
+    {
+        this.save().then( function() {
+            self.connection.sendMessage( jid, "Database saved." );
+        }, function( err ) {
+            self.connection.sendMessage( jid, "Error saving database: " + err );
+        } );
+    }
+}
+
+
+Idle.prototype.handleAuth   = function( jid, args, user, email )
+{
+    var self    = this;
+
+    if ( user != null && args.length > 1 && args[ 1 ] == this.config.admin_password )
+    {
+        user.setACL( ACL_OWNER );
+        this.connection.sendMessage( jid, "Your ACL is now " + ACL_OWNER );
+    }
+}
+
+
+Idle.prototype.handleHOG    = function( jid, args, user, email )
+{
+    if ( user != null && user.getACL() >= this.config.permissions.hog )
+    {
+        console.log( "Idle :: " + email + " triggered a Hand of God" );
+        this.hog();
+    }
+}
+
+
+Idle.prototype.hog          = function() { this.events.hog(); }
 
 
 Idle.prototype.save     = function()
 {
-    this.users.saveUsers();
+    return this.users.saveUsers();
 }
 
 
@@ -83,15 +133,28 @@ Idle.prototype.handleInfo   = function( jid, args, user, email )
 {
     if ( user )
     {
-        var info    = "";
+        var info    = "-- " + email + " --\n";
+        info        += "Class: " + user.getClassName() + "\n";
         info        += "Level: " + ( user.getLevel() + 1 ) + "\n";
 
         var nextTime    = user.getNextTime();
-        info        += "Next level in: " + nicetime( nextTime ) + " (" + nextTime + " seconds)";
+        info        += "Next level in: " + nicetime( nextTime ) + " (" + nextTime + " seconds)\n";
+
+        var acl     = user.getACL();
+        if ( acl )
+        {
+            info    += "ACL: " + acl + "\n";
+        }
 
 
         this.connection.sendMessage( jid, info )
     }
+}
+
+
+Idle.prototype.handleVCard  = function( jid, args, user, email )
+{
+    this.connection.getVCard( jid );
 }
 
 
