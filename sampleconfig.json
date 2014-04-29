@@ -1,12 +1,27 @@
 {
 	"db": 			"/path/to/idle.db",
-	"username": 	"youremail@gmail.com",
+	"username": 	"idlerpgbot@email.com",
 	"password": 	"password",
+
+	"admin_password": 	"password123",
 
 	"rpg": {
 		"rpbase": 	600,
 		"rpstep": 	1.16,
-		"ticrate": 	10000,
-		"saverate": 600000
+		"ticrate": 	3000,
+		"saverate": 600000,
+		"hograte": 	1728000,
+
+		"challenge_opponent_level": 25,
+		"challenge_opponent_level_chance": 4,
+
+		"items": [ "ring", "amulet", "charm", "weapon", "helm", "tunic", "pair of gloves", "set of leggings", "shield", "pair of boots" ]
+	},
+
+	"permissions": {
+		"save": 		400,
+		"hog": 			300,
+		"level_up": 	300,
+		"challenge": 	300
 	}
 }

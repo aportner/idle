@@ -154,10 +154,34 @@ Idle.prototype.handleRegister = function( jid, args, user, email )
 
 Idle.prototype.handleInfo   = function( jid, args, user, email )
 {
+    var self    = this;
+
+    if ( args.length > 1 )
+    {
+        this.users.getUser( args[ 1 ] ).then( function( newUser ) {
+            if ( newUser )
+            {
+                self.getInfo( jid, newUser );
+            }
+            else
+            {
+                self.connection.sendMessage( jid, "No such user: " + args[ 1 ] );
+            }
+        } );
+    }
+    else
+    {
+        self.getInfo( jid, user );
+    }
+}
+
+
+Idle.prototype.getInfo      = function( jid, user )
+{
     try {
     if ( user )
     {
-        var info    = "-- " + email + " --\n";
+        var info    = "-- " + user.getEmail() + " --\n";
         info        += "Class: " + user.getClassName() + "\n";
         info        += "Level: " + ( user.getLevel() + 1 ) + "\n";
 
