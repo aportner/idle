@@ -42,12 +42,13 @@ Idle.prototype.initCommands = function()
 {
     this.commands.addCommand( "register", "handleRegister", "Registers an account" );
     this.commands.addCommand( "info", "handleInfo", "Prints out the info of your account" );
-    this.commands.addCommand( "save", "handleSave" );
+    this.commands.addCommand( "save", "handleSave", "Saves the database", this.config.permissions.save );
     this.commands.addCommand( "auth", "handleAuth" );
     this.commands.addCommand( "vcard", "handleVCard" );
-    this.commands.addCommand( "hog", "handleHOG" );
-    this.commands.addCommand( "levelup", "handleLevelUp" );
-    this.commands.addCommand( "challenge", "handleChallenge" );
+    this.commands.addCommand( "hog", "handleHOG", "Triggers a Hand of God event", this.config.permissions.hog );
+    this.commands.addCommand( "levelup", "handleLevelUp", "Triggers a level up event", this.config.permissions.level_up );
+    this.commands.addCommand( "challenge", "handleChallenge", "Triggers a 1v1 challenge", this.config.permissions.challenge );
+    this.commands.addCommand( "hof", "handleHOF", "Shows the hall of fame" );
 }
 
 
@@ -57,18 +58,31 @@ Idle.prototype.online   = function()
 }
 
 
+Idle.prototype.handleHOF    = function( jid, args, user, email )
+{
+    var hof         = this.users.getHOF();
+    var numHOF      = Math.min( hof.length, 10 );
+    var message     = "Hall of fame:\n-------------------------\n";
+
+    for ( var i = 0; i < numHOF; ++i )
+    {
+        var user    = hof[ i ];
+        message     += ( i + 1 ) + ". " + user.getEmail() + " the level " + ( user.getLevel() + 1 ) + " " + user.getClassName() + " -- itemsum " + user.getItemSum() + "\n";
+    }
+
+    this.connection.sendMessage( jid, message );
+}
+
+
 Idle.prototype.handleSave   = function( jid, args, user, email )
 {
     var self        = this;
 
-    if ( user.getACL() >= this.config.permissions.save )
-    {
-        this.save().then( function() {
-            self.connection.sendMessage( jid, "Database saved." );
-        }, function( err ) {
-            self.connection.sendMessage( jid, "Error saving database: " + err );
-        } );
-    }
+    this.save().then( function() {
+        self.connection.sendMessage( jid, "Database saved." );
+    }, function( err ) {
+        self.connection.sendMessage( jid, "Error saving database: " + err );
+    } );
 }
 
 
@@ -86,32 +100,23 @@ Idle.prototype.handleAuth   = function( jid, args, user, email )
 
 Idle.prototype.handleHOG    = function( jid, args, user, email )
 {
-    if ( user != null && user.getACL() >= this.config.permissions.hog )
-    {
-        console.log( "Idle :: " + email + " triggered a Hand of God" );
-        this.hog();
-    }
+    console.log( "Idle :: " + email + " triggered a Hand of God" );
+    this.hog();
 }
 
 
 Idle.prototype.handleLevelUp    = function( jid, args, user, email )
 {
-    if ( user != null && user.getACL() >= this.config.permissions.level_up )
-    {
-        console.log( "Idle :: " + email + " triggered a level up" );
-        user.levelUp();
-        this.events.levelUp( user );
-    }
+    console.log( "Idle :: " + email + " triggered a level up" );
+    user.levelUp();
+    this.events.levelUp( user );
 }
 
 
 Idle.prototype.handleChallenge    = function( jid, args, user, email )
 {
-    if ( user != null && user.getACL() >= this.config.permissions.challenge )
-    {
-        console.log( "Idle :: " + email + " triggered a challenge" );
-        this.events.challengeOpponent( user );
-    }
+    console.log( "Idle :: " + email + " triggered a challenge" );
+    this.events.challengeOpponent( user );
 }
 
 
