@@ -193,6 +193,8 @@ Idle.prototype.getInfo      = function( jid, user )
         var nextTime    = user.getNextTime();
         info        += "Next level in: " + nicetime( nextTime ) + " (" + nextTime + " seconds)\n";
 
+        info        += "Location: [" + user.getX() + ", " + user.getY() + "]\n";
+
         var acl     = user.getACL();
         if ( acl )
         {
