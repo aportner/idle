@@ -1,27 +1,95 @@
 {
-	"db": 			"/path/to/idle.db",
+	"db": 			"/home/pi/idle/idle.db",
 	"username": 	"idlerpgbot@email.com",
 	"password": 	"password",
 
-	"admin_password": 	"password123",
+	"admin_password": 	"admin_password",
 
 	"rpg": {
-		"rpbase": 	600,
-		"rpstep": 	1.16,
-		"ticrate": 	3000,
-		"saverate": 600000,
-		"hograte": 	1728000,
+		"rpbase": 			600,
+		"rpstep": 			1.16,
+		"ticrate": 			3000,
+		"saverate": 		600000,
+		"hograte": 			1728000,
+		"calamityrate": 	886400,
+		"godsendrate": 		486400,
 
 		"challenge_opponent_level": 25,
 		"challenge_opponent_level_chance": 4,
 
-		"items": [ "ring", "amulet", "charm", "weapon", "helm", "tunic", "pair of gloves", "set of leggings", "shield", "pair of boots" ]
+		"items": [ "ring", "amulet", "charm", "weapon", "helm", "tunic", "pair of gloves", "set of leggings", "shield", "pair of boots" ],
+
+		"map_x": 	500,
+		"map_y": 	500,
+
+		"calamities": 		[
+			"paid too much for a Kurt Vonnegut novel",
+			"fell into a hole",
+			"bit your own tongue",
+			"set yourself on fire",
+			"ate a poisonous fruit",
+			"lost your mind",
+			"died, temporarily..",
+			"were caught in a terrible snowstorm",
+			"EXPLODED, somewhat..",
+			"got knifed in a dark alley",
+			"saw an episode of Ally McBeal",
+			"got turned INSIDE OUT, practically",
+			"ate a very disagreeable fruit, getting a terrible case of heartburn",
+			"met up with a mob hitman for not paying his bills",
+			"have fallen ill with the black plague",
+			"were struck by lightning",
+			"were attacked by a rabid cow",
+			"were attacked by a rabid wolverine",
+			"were set on fire",
+			"were decapitated, temporarily..",
+			"were tipped by a cow",
+			"were bucked from a horse",
+			"were bitten by a moose",
+			"were sat on by a giant",
+			"ate a plate of discounted, day-old sushi",
+			"got a dumb haircut",
+			"got lost in the woods",
+			"misplaced your map",
+			"broke your compass",
+			"lost your glasses",
+			"walked face-first into a tree"
+		],
+
+		"godsends": 		[
+			"found a Kurt Vonnegut novel for TWO DOLLARS",
+			"caught a unicorn",
+			"discovered a secret, underground passage",
+			"were taught to run quickly by a secret tribe of pygmies that know how to, among other things, run quickly",
+			"discovered caffeinated coffee",
+			"grew an extra leg",
+			"were visited by a very pretty nymph",
+			"found a kitten",
+			"learned to dance like no one's watching",
+			"found an exploit in the IRPG code",
+			"tamed a wild horse",
+			"found a one-time-use spell of quickness",
+			"bought a faster computer",
+			"bribed the local IRPG administrator",
+			"stopped using dial-up",
+			"invented the wheel",
+			"gained a sixth sense",
+			"got a big ol' wet smooch",
+			"had your clothes laundered by a passing fairy",
+			"were rejuvenated by drinking from a magic stream",
+			"were bitten by a radioactive spider",
+			"hit it off with a drunk sorority chick named Jenny",
+			"were finally accepted by your peers"
+		]
 	},
 
 	"permissions": {
+		"die": 			400,
 		"save": 		400,
 		"hog": 			300,
+		"calamity": 	300,
 		"level_up": 	300,
-		"challenge": 	300
+		"challenge": 	300,
+		"godsend":		300
 	}
 }

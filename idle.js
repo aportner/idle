@@ -46,9 +46,19 @@ Idle.prototype.initCommands = function()
     this.commands.addCommand( "auth", "handleAuth" );
     this.commands.addCommand( "vcard", "handleVCard" );
     this.commands.addCommand( "hog", "handleHOG", "Triggers a Hand of God event", this.config.permissions.hog );
+    this.commands.addCommand( "calamity", "handleCalamity", "Triggers a Calamity event", this.config.permissions.calamity );
+    this.commands.addCommand( "godsend", "handleGodsend", "Triggers a Godsend event", this.config.permissions.godsend );
     this.commands.addCommand( "levelup", "handleLevelUp", "Triggers a level up event", this.config.permissions.level_up );
     this.commands.addCommand( "challenge", "handleChallenge", "Triggers a 1v1 challenge", this.config.permissions.challenge );
     this.commands.addCommand( "hof", "handleHOF", "Shows the hall of fame" );
+    this.commands.addCommand( "die", "handleDie", "Kills the bot", this.config.permissions.die );
+}
+
+
+Idle.prototype.handleDie    = function( jid, args, user, email )
+{
+    this.connection.sendMessage( jid, "Goodnight, sweet prince." );
+    process.exit( 0 );
 }
 
 
@@ -103,6 +113,28 @@ Idle.prototype.handleHOG    = function( jid, args, user, email )
     console.log( "Idle :: " + email + " triggered a Hand of God" );
     this.hog();
 }
+
+
+Idle.prototype.handleCalamity   = function( jid, args, user, email )
+{
+    console.log( "Idle :: " + email + " triggered a calamity" );
+    this.calamity();
+}
+
+
+Idle.prototype.calamity         = function( jid, args, user, email )
+{
+    this.events.calamity();
+}
+
+
+Idle.prototype.handleGodsend    = function( jid, args, user, email )
+{
+    console.log( "Idle :: " + email + " triggered a Godsend" );
+    this.godsend();
+}
+
+Idle.prototype.godsend          = function() { this.events.godsend(); }
 
 
 Idle.prototype.handleLevelUp    = function( jid, args, user, email )
