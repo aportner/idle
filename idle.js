@@ -5,6 +5,7 @@ var Commands    = require( './lib/commands' );
 var Users       = require( './lib/users' );
 var GameTimer   = require( './lib/timer' );
 var Events      = require( './lib/events' );
+var Monsters    = require( './lib/monsters' );
 var config      = require( './config.json' );
 
 
@@ -18,6 +19,7 @@ function Idle()
     this.db         = new Engine.Db( config.db, {} );
     this.events     = new Events( this );
 
+    this.monsters   = new Monsters.Monsters( this, this.config );
     this.users      = new Users.Users( this, this.db );
     this.users.load().then( function() {
         self.onUsersLoad();
@@ -52,6 +54,23 @@ Idle.prototype.initCommands = function()
     this.commands.addCommand( "challenge", "handleChallenge", "Triggers a 1v1 challenge", this.config.permissions.challenge );
     this.commands.addCommand( "hof", "handleHOF", "Shows the hall of fame" );
     this.commands.addCommand( "die", "handleDie", "Kills the bot", this.config.permissions.die );
+    this.commands.addCommand( "monsters", "handleMonsters", "Shows all monsters" );
+}
+
+
+Idle.prototype.handleMonsters   = function( jid, args, user, email )
+{
+    var monsters        = this.monsters.monsters;
+    var len             = monsters.length;
+    var message         = "";
+
+    for ( var i = 0; i < len; ++i )
+    {
+        var monster     = monsters[ i ];
+        message         += "Level " + monster.getLevel() + " " + monster.getName() + " - itemsum " + monster.getItemSum() + " - at [" + monster.getX() + ", " + monster.getY() + "]\n";
+    }
+
+    this.connection.sendMessage( jid, message );
 }
 
 

@@ -22,7 +22,7 @@
         "map_x":    500,
         "map_y":    500,
 
-        "calamities":       [
+        "calamities": [
             "paid too much for a Kurt Vonnegut novel",
             "fell into a hole",
             "bit your own tongue",
@@ -56,7 +56,7 @@
             "walked face-first into a tree"
         ],
 
-        "godsends":         [
+        "godsends": [
             "found a Kurt Vonnegut novel for TWO DOLLARS",
             "caught a unicorn",
             "discovered a secret, underground passage",
@@ -80,7 +80,30 @@
             "were bitten by a radioactive spider",
             "hit it off with a drunk sorority chick named Jenny",
             "were finally accepted by your peers"
-        ]
+        ],
+
+        "monsters": [
+            "Potted Plant",
+            "Drooling Slime",
+            "Lame Goblin",
+            "Crabs",
+            "Gelatinous Octahedron",
+            "Flying Frogs",
+            "Large Angry Chicken",
+            "Snails on Speed",
+            "Undead Horse",
+            "Leprechaun",
+            "Gazebo",
+            "Shrieking Geek",
+            "Floating Nose",
+            "Stoned Gollem",
+            "Squidzilla",
+            "Unspeakably Awful Undescribable Horror",
+            "Vampire",
+            "Plutonium Dragon"
+        ],
+        
+        "monster_max_level": 60
     },
 
     "permissions": {
